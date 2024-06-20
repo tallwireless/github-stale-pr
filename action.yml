@@ -34,4 +34,4 @@ outputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/servercentral/github-stale-pr/action:latest'
+  image: 'docker://ghcr.io/tallwireless/github-stale-pr:latest'
