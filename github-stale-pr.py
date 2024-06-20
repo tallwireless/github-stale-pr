@@ -1,6 +1,7 @@
 from github import Auth
 from github import Github
 from os import environ
+import requests
 import arrow
 
 env = dict(environ)
@@ -10,6 +11,7 @@ exclude_labels = [x.lower() for x in exclude_labels]
 ignore_drafts = bool(env["INPUT_IGNOREDRAFTS"])
 required_label = env["INPUT_REQUIREDLABELS"].split(",")
 days = int(env["INPUT_DAYS_SINCE_CREATED"])
+slack_url = env["INPUT_SLACKURL"]
 
 
 handle = Github(auth=Auth.Token(env["INPUT_GITHUB_TOKEN"]))
@@ -37,13 +39,32 @@ for pr in repo.get_pulls():
     if delta.days >= days:
         pull_requests.append(pr)
         name = pr.user.login
-        if pr.user.name is not None:
-            name = f"{pr.user.name} ({pr.user.login})"
         output.append(
-            f"<{pr.html_url}|{pr.title}> opened by {name} untouched in {delta.days} days."
+            f"*<{pr.html_url}|{pr.title}>* Opened by: _{name}_ Last Activity: _{delta.days} days_"
         )
 
+if len(output) > 0:
+    output_json = {
+        "blocks": [
+            {
+                "type": "header",
+                "text": {
+                    "type": "plain_text",
+                    "text": f"Stale Pull Requests for {env['GITHUB_REPOSITORY']}",
+                },
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "The following pull requests have not been touched in at least {days} days. The requester should review them, and make sure they are handled.\n\n",
+                },
+            },
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": "\n".join(output)},
+            },
+        ]
+    }
 
-output_str = "\n".join(output)
-fout = open(env["GITHUB_OUTPUT"], "a")
-fout.write(f'message="{output_str}"')
+    r = requests.post(slack_url, json=output_json)

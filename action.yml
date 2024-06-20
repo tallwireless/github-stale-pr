@@ -24,6 +24,9 @@ inputs:
     required: false
     description: Collections of labels separated by commas that should be required when searching for a PR.
     type: string
+  slackURL:
+    required: true
+    type: string
 outputs:
   message:
     description: 'A markdown formatted message'
