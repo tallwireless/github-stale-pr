@@ -25,10 +25,6 @@ inputs:
     description: Collections of labels separated by commas that should be required when searching for a PR.
     type: string
 outputs:
-  repo:
-    description: 'The name of the repo in owner/repo pattern'
-  data:
-    description: 'A JSON object with the data'
   message:
     description: 'A markdown formatted message'
 
