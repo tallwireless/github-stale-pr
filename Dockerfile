@@ -7,4 +7,4 @@ run pip install --no-cache-dir -r reqs-prod.txt
 
 copy . .
 
-cmd ["python3", "./github-stale-pr.py"]
+cmd ["python3", "/usr/src/app/github-stale-pr.py"]
