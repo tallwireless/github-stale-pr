@@ -57,7 +57,7 @@ if len(output) > 0:
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "The following pull requests have not been touched in at least {days} days. The requester should review them, and make sure they are handled.\n\n",
+                    "text": "The following pull requests have not been touched in at least {days} days. The requester should review them, and make sure they are handled. See <https://meetdeft.atlassian.net/wiki/x/A4D9kw|KB-1-10-01-0004> for more information.\n\n",
                 },
             },
             {
